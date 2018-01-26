@@ -1,0 +1,32 @@
+# 01_engine_usage.py
+
+
+Assuming this table:                                                            
+
+CREATE TABLE employee (                                                     
+    emp_id INTEGER PRIMARY KEY,                                             
+    emp_name VARCHAR(30)                                                    
+}                                                                           
+                                                                                
+And using the "engine.execute()" method to invoke a statement:
+
+1. Execute an INSERT statement that will insert the row with emp_name='dilbert'.
+   The primary key column can be omitted so that it is generated automatically.
+
+2. SELECT all rows from the employee table.
+
+>>> connect = engine.connect()
+>>> trans = connect.begin()
+[SQL]: BEGIN (implicit)
+>>> connect.execute('INSERT INTO employee (emp_name) VALUES (:emp_name)', emp_name='dilbert')
+[SQL]: INSERT INTO employee (emp_name) VALUES (:emp_name)
+[SQL]: {'emp_name': 'dilbert'}
+<sqlalchemy.engine.result.ResultProxy object at 0x7f3bc5ac2a80>
+>>> trans.commit()
+[SQL]: COMMIT
+>>> result = connect.execute('SELECT * FROM employee')
+[SQL]: SELECT * FROM employee
+[SQL]: ()
+>>> print (result.fetchall())
+[(1, u'ed'), (2, u'jack'), (3, u'fred'), (4, u'wendy'), (5, u'mary'), (6, u'dilbert')]
+>>> 
